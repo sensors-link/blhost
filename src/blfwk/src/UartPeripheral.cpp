@@ -157,6 +157,11 @@ status_t UartPeripheral::write(const uint8_t *buffer, uint32_t byteCount)
         return kStatus_Fail;
 }
 
+void UartPeripheral::serial_set_timeout(bool bTimeOut)
+{
+	serial_set_read_timeout(m_fileDescriptor, kUartPeripheral_DefaultReadTimeoutMs, bTimeOut);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

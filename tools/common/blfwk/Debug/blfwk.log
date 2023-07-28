@@ -1,0 +1,62 @@
+﻿生成启动时间为 2023-7-24 10:58:36。
+     1>项目“E:\work\VisualStudio\blhost\tools\common\blfwk\blfwk.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I../../../src /I../../../src/include /I../../../src/drivers/common /I../../../src/bm_usb /Zi /nologo /W3 /WX- /Od /Oy- /D BOOTLOADER_HOST /D LPCUSBSIO /D WIN32 /D MSWIN /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _LIB /D _USING_V110_SDK71_ /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\blfwk.pdb" /Gd /TP /wd4200 /analyze- /errorReport:prompt ..\..\..\src\blfwk\src\Command.cpp
+         Command.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"E:\work\VisualStudio\blhost\tools\common\blfwk\Debug\blfwk.lib" setupapi.lib libusbsio.lib /LIBPATH:E:\work\VisualStudio\blhost\tools\common\blfwk\..\..\..\src\middleware\libusbsio\bin\Win32 /NOLOGO Debug\blfwk.res
+         Debug\AESCounter.obj
+         Debug\AESKey.obj
+         Debug\Blob.obj
+         Debug\Bootloader.obj
+         Debug\BusPal.obj
+         Debug\BusPalPeripheral.obj
+         Debug\Command.obj
+         Debug\DataSource.obj
+         Debug\DataSourceImager.obj
+         Debug\DataTarget.obj
+         Debug\ELFSourceFile.obj
+         Debug\ExcludesListMatcher.obj
+         Debug\format_string.obj
+         Debug\GHSSecInfo.obj
+         Debug\GlobMatcher.obj
+         Debug\HexValues.obj
+         Debug\IntelHexSourceFile.obj
+         Debug\jsoncpp.obj
+         Debug\Logging.obj
+         Debug\LpcUsbSio.obj
+         Debug\LpcUsbSioPeripheral.obj
+         Debug\options.obj
+         Debug\Random.obj
+         Debug\rijndael.obj
+         Debug\RijndaelCTR.obj
+         Debug\SBSourceFile.obj
+         Debug\SDPCommand.obj
+         Debug\SDPUsbHidPacketizer.obj
+         Debug\SearchPath.obj
+         Debug\serial.obj
+         Debug\SerialPacketizer.obj
+         Debug\SourceFile.obj
+         Debug\SRecordSourceFile.obj
+         Debug\StELFFile.obj
+         Debug\StExecutableImage.obj
+         Debug\StIntelHexFile.obj
+         Debug\StSRecordFile.obj
+         Debug\UartPeripheral.obj
+         Debug\Updater.obj
+         Debug\UsbHidPacketizer.obj
+         Debug\UsbHidPeripheral.obj
+         Debug\utils.obj
+         Debug\Value.obj
+         Debug\CheckSum8.obj
+         Debug\crc16.obj
+         Debug\crc32.obj
+     1>LINK : warning LNK4068: 未指定 /MACHINE；默认设置为 X86
+         libusbsio.lib(hid.obj) : 找到 MSIL .netmodule 或使用 /GL 编译的模块；正在使用 /LTCG 重新启动链接；将 /LTCG 添加到链接命令行以改进链接器性能
+     1>LINK : warning LNK4068: 未指定 /MACHINE；默认设置为 X86
+         blfwk.vcxproj -> E:\work\VisualStudio\blhost\tools\common\blfwk\Debug\blfwk.lib
+     1>已完成生成项目“E:\work\VisualStudio\blhost\tools\common\blfwk\blfwk.vcxproj”(Build 个目标)的操作。
+
+已成功生成。
+
+已用时间 00:00:24.78

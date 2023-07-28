@@ -85,6 +85,8 @@ public:
     virtual status_t ping(
         int retries, unsigned int delay, ping_response_t *response, int comSpeed, int *actualComSpeed);
 
+	virtual status_t ping(int retries, unsigned int delay, unsigned int timeOutMs);
+
 protected:
     //! @brief Send ACK if needed.
     status_t send_deferred_ack();

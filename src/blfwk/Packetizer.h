@@ -89,6 +89,8 @@ public:
     void setAbortEnabled(bool isEnabled) { m_isAbortEnabled = isEnabled; }
     //! @biref Check if abort data phase is enabled.
     bool isAbortEnabled() { return m_isAbortEnabled; }
+
+	virtual status_t ping(int retries, unsigned int delay, unsigned int timeOutMs) { return kStatus_Success; };
 protected:
     Peripheral *m_peripheral;     //!< Peripheral to send/receive bytes on.
     standard_version_t m_version; //!< Framing protocol version.

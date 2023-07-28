@@ -13,6 +13,7 @@
 #include "blfwk/json.h"
 #include "blfwk/utils.h"
 #include "bootloader_common.h"
+#include "CheckSum/CheckSum8.h"
 #ifdef LINUX
 #include <string.h>
 #endif
@@ -469,6 +470,10 @@ Command *Command::create(const string_vector_t *argv)
     {
         cmd = new ListMemory(argv);
     }
+	else if (argv->at(0) == kCommand_BootPing.name)
+	{
+		cmd = new BootPing(argv);
+	}
     else
     {
         return NULL;
@@ -1338,6 +1343,14 @@ bool GetProperty::processResponse(const get_property_response_packet_t *packet)
             m_responseDetails = format_string("Byte Write Timeout is %dms", m_responseValues.at(1));
         }
         break;
+		case kPropertyTag_FlashEncrypt:
+		{
+			if(m_responseValues.at(1))
+				m_responseDetails = format_string("The Flash Encrypt is Enable");
+			else
+				m_responseDetails = format_string("The Flash Encrypt is Disable");
+		}
+		break;
         case kPropertyTag_InvalidProperty:
         default:
             break;
@@ -1709,6 +1722,7 @@ void WriteMemory::sendTo(Packetizer &device)
     DataPacket::FileDataProducer fileProducer;
     DataPacket::SegmentDataProducer segmentProducer(m_segment);
     DataPacket::DataProducer *dataProducer;
+	uint32_t fw_status;
 
     if (m_segment)
     {
@@ -1741,7 +1755,7 @@ void WriteMemory::sendTo(Packetizer &device)
     uint32_t packetSizeInBytes;
     GetProperty getPacketSize(kProperty_MaxPacketSize, 0 /*Not used*/);
     getPacketSize.sendTo(device);
-    uint32_t fw_status = getPacketSize.getResponseValues()->at(0);
+    fw_status = getPacketSize.getResponseValues()->at(0);
     if (fw_status != kStatus_Success)
     {
         // Failed to get data packet size.
@@ -1779,10 +1793,60 @@ void WriteMemory::sendTo(Packetizer &device)
     // Send data packets.
     blfwk::DataPacket dataPacket(dataProducer, packetSizeInBytes);
 
-    processResponse(dataPacket.sendTo(device, &bytesWritten, m_progress));
+	processResponse(dataPacket.sendTo(device, &bytesWritten, m_progress));
 
-    // Format the command transfer details.
-    m_responseDetails = format_string("Wrote %d of %d bytes.", bytesWritten, bytesToWrite);
+	// Format the command transfer details.
+	m_responseDetails = format_string("Wrote %d of %d bytes.", bytesWritten, bytesToWrite);
+
+	if (m_responseValues.at(0) == kStatus_Success)
+	{
+		GetProperty getMemoryCheckSum(kProperty_MemoryCheckSum, 0 /*Not used*/);
+		getMemoryCheckSum.sendTo(device);
+		fw_status = getMemoryCheckSum.getResponseValues()->at(0);
+		if (fw_status != kStatus_Success)
+		{
+			// Failed to get memory data checksum.
+			m_responseValues.pop_back();
+            m_responseValues.push_back(fw_status);
+			return;
+		}
+
+		// Calculate the checksum of the current segment
+		uint8_t check_sum = 0;
+		uint32_t bytes_num = 0;
+		uint8_t bytes_buf[0x40];
+		dataProducer->rewindData();
+		while (bytes_num < bytesWritten)
+		{
+			uint32_t count = MIN(0x40, (bytesWritten - bytes_num));
+			count = dataProducer->getData(bytes_buf, count);
+			if (count)
+			{
+				check_sum += checksum8_calc(bytes_buf, count);
+				bytes_num += count;
+			}
+		}
+
+		// Compare checksum values
+		if (getMemoryCheckSum.getResponseValues()->size() != 2 || getMemoryCheckSum.getResponseValues()->at(1) != check_sum)
+		{
+			m_responseValues.pop_back();
+			m_responseValues.push_back(kStatus_Fail);
+		}
+	}
+
+	if (!m_fileOrData.empty())
+	{
+		m_responseDetails.append("\r\n" + m_fileOrData + " " + getArg(0) + " is ");
+		if (m_responseValues.at(0) == kStatus_Success)
+		{
+			m_responseDetails.append("success.");
+		}
+		else
+		{
+			m_responseDetails.append("fail.");
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4065,6 +4129,7 @@ void FlashImage::sendTo(Packetizer &device)
             if (fw_status != kStatus_Success)
             {
                 m_responseValues.push_back(fw_status);
+				m_responseDetails.append(m_fileName + " " + getArg(0) + " is fail.");
                 delete dataSource;
                 return;
             }
@@ -4089,12 +4154,14 @@ void FlashImage::sendTo(Packetizer &device)
         if (fw_status != kStatus_Success)
         {
             m_responseValues.push_back(fw_status);
+			m_responseDetails.append(m_fileName + " " + getArg(0) + " is fail.");
             delete dataSource;
             return;
         }
     }
 
     m_responseValues.push_back(fw_status);
+	m_responseDetails.append(m_fileName + " " + getArg(0) + " is success.");
     delete dataSource;
     m_sourceFile->close();
 }
@@ -4488,6 +4555,64 @@ void ListMemory::sendTo(Packetizer &device)
             }
         }
     }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// BootPing command
+////////////////////////////////////////////////////////////////////////////////
+
+// See host_command.h for documentation of this method.
+bool BootPing::init()
+{
+	if (getArgCount() != 1 && getArgCount() != 2 && getArgCount() != 3)
+	{
+		return false;
+	}
+
+	m_pingNum = 10;
+	m_pingTimeOut = 50;
+
+	if (getArgCount() != 1)
+	{
+		if (!utils::stringtoui(getArg(1), m_pingNum))
+		{
+			return false;
+		}
+
+		if (getArgCount() == 3)
+		{
+			if (!utils::stringtoui(getArg(2), m_pingTimeOut))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+// See host_command.h for documentation of this method.
+void BootPing::sendTo(Packetizer &device)
+{
+	status_t status = device.ping(m_pingNum, 0, m_pingTimeOut);
+	if (status != kStatus_Success)
+	{
+		Reset cmd; // dummy command to get access to status text.
+					// report ping failure in JSON output mode.
+		Json::Value root;
+		root["command"] = "ping";
+		root["status"] = Json::Value(Json::objectValue);
+		root["status"]["value"] = static_cast<Json::UInt>(status);
+		root["status"]["description"] =
+			format_string("%d (0x%X) %s", status, status, cmd.getStatusMessage(status).c_str());
+		root["response"] = Json::Value(Json::arrayValue);
+
+		Json::StyledWriter writer;
+		Log::json(writer.write(root).c_str());
+
+		throw std::runtime_error(cmd.getStatusMessage(status));
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

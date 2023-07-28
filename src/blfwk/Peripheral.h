@@ -75,6 +75,9 @@ public:
 
     //! @brief Return peripheral Type
     virtual _host_peripheral_types get_type(void) = 0;
+
+	virtual void flushRX() {};
+	virtual void serial_set_timeout(bool bTimeOut) {};
 };
 
 } // namespace blfwk

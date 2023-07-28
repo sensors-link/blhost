@@ -1,0 +1,109 @@
+﻿生成启动时间为 2023-7-28 13:47:44。
+     1>项目“E:\work\VisualStudio\blhost\tools\common\blfwk\blfwk.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I../../../src /I../../../src/include /I../../../src/drivers/common /I../../../src/bm_usb /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D BOOTLOADER_HOST /D LPCUSBSIO /D WIN32 /D MSWIN /D _CRT_SECURE_NO_WARNINGS /D NDEBUG /D _LIB /D _USING_V110_SDK71_ /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\blfwk.pdb" /Gd /TP /wd4200 /analyze- /errorReport:prompt ..\..\..\src\blfwk\src\AESCounter.cpp ..\..\..\src\blfwk\src\AESKey.cpp ..\..\..\src\blfwk\src\Blob.cpp ..\..\..\src\blfwk\src\Bootloader.cpp ..\..\..\src\blfwk\src\BusPal.cpp ..\..\..\src\blfwk\src\BusPalPeripheral.cpp ..\..\..\src\blfwk\src\Command.cpp ..\..\..\src\blfwk\src\DataSource.cpp ..\..\..\src\blfwk\src\DataSourceImager.cpp ..\..\..\src\blfwk\src\DataTarget.cpp ..\..\..\src\blfwk\src\ELFSourceFile.cpp ..\..\..\src\blfwk\src\ExcludesListMatcher.cpp ..\..\..\src\blfwk\src\format_string.cpp ..\..\..\src\blfwk\src\GHSSecInfo.cpp ..\..\..\src\blfwk\src\GlobMatcher.cpp ..\..\..\src\blfwk\src\HexValues.cpp ..\..\..\src\blfwk\src\IntelHexSourceFile.cpp ..\..\..\src\blfwk\src\jsoncpp.cpp ..\..\..\src\blfwk\src\Logging.cpp ..\..\..\src\blfwk\src\LpcUsbSio.cpp ..\..\..\src\blfwk\src\LpcUsbSioPeripheral.cpp ..\..\..\src\blfwk\src\options.cpp ..\..\..\src\blfwk\src\Random.cpp ..\..\..\src\blfwk\src\rijndael.cpp ..\..\..\src\blfwk\src\RijndaelCTR.cpp ..\..\..\src\blfwk\src\SBSourceFile.cpp ..\..\..\src\blfwk\src\SDPCommand.cpp ..\..\..\src\blfwk\src\SDPUsbHidPacketizer.cpp ..\..\..\src\blfwk\src\SearchPath.cpp ..\..\..\src\blfwk\src\serial.c ..\..\..\src\blfwk\src\SerialPacketizer.cpp ..\..\..\src\blfwk\src\SourceFile.cpp ..\..\..\src\blfwk\src\SRecordSourceFile.cpp ..\..\..\src\blfwk\src\StELFFile.cpp ..\..\..\src\blfwk\src\StExecutableImage.cpp ..\..\..\src\blfwk\src\StIntelHexFile.cpp ..\..\..\src\blfwk\src\StSRecordFile.cpp ..\..\..\src\blfwk\src\UartPeripheral.cpp ..\..\..\src\blfwk\src\Updater.cpp ..\..\..\src\blfwk\src\UsbHidPacketizer.cpp ..\..\..\src\blfwk\src\UsbHidPeripheral.cpp ..\..\..\src\blfwk\src\utils.cpp ..\..\..\src\blfwk\src\Value.cpp ..\..\..\src\checksum\src\CheckSum8.c ..\..\..\src\crc\src\crc16.c ..\..\..\src\crc\src\crc32.c
+         AESCounter.cpp
+         AESKey.cpp
+         Blob.cpp
+         Bootloader.cpp
+         BusPal.cpp
+         BusPalPeripheral.cpp
+         Command.cpp
+         DataSource.cpp
+         DataSourceImager.cpp
+         DataTarget.cpp
+         ELFSourceFile.cpp
+         ExcludesListMatcher.cpp
+         format_string.cpp
+         GHSSecInfo.cpp
+         GlobMatcher.cpp
+         HexValues.cpp
+         IntelHexSourceFile.cpp
+         jsoncpp.cpp
+         Logging.cpp
+         LpcUsbSio.cpp
+         正在编译...
+         LpcUsbSioPeripheral.cpp
+         options.cpp
+         Random.cpp
+         rijndael.cpp
+         RijndaelCTR.cpp
+         SBSourceFile.cpp
+         SDPCommand.cpp
+         SDPUsbHidPacketizer.cpp
+         SearchPath.cpp
+         serial.c
+         SerialPacketizer.cpp
+         SourceFile.cpp
+         SRecordSourceFile.cpp
+         StELFFile.cpp
+         StExecutableImage.cpp
+         StIntelHexFile.cpp
+         StSRecordFile.cpp
+         UartPeripheral.cpp
+         Updater.cpp
+         UsbHidPacketizer.cpp
+         正在编译...
+         UsbHidPeripheral.cpp
+         utils.cpp
+         Value.cpp
+         CheckSum8.c
+         crc16.c
+         crc32.c
+       ResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\bin\rc.exe /D _USING_V110_SDK71_ /l"0x0409" /nologo /fo"Release\blfwk.res" blfwk.rc 
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"E:\work\VisualStudio\blhost\tools\common\blfwk\Release\blfwk.lib" setupapi.lib libusbsio.lib /LIBPATH:E:\work\VisualStudio\blhost\tools\common\blfwk\..\..\..\src\middleware\libusbsio\bin\Win32 /NOLOGO /LTCG Release\blfwk.res
+         Release\AESCounter.obj
+         Release\AESKey.obj
+         Release\Blob.obj
+         Release\Bootloader.obj
+         Release\BusPal.obj
+         Release\BusPalPeripheral.obj
+         Release\Command.obj
+         Release\DataSource.obj
+         Release\DataSourceImager.obj
+         Release\DataTarget.obj
+         Release\ELFSourceFile.obj
+         Release\ExcludesListMatcher.obj
+         Release\format_string.obj
+         Release\GHSSecInfo.obj
+         Release\GlobMatcher.obj
+         Release\HexValues.obj
+         Release\IntelHexSourceFile.obj
+         Release\jsoncpp.obj
+         Release\Logging.obj
+         Release\LpcUsbSio.obj
+         Release\LpcUsbSioPeripheral.obj
+         Release\options.obj
+         Release\Random.obj
+         Release\rijndael.obj
+         Release\RijndaelCTR.obj
+         Release\SBSourceFile.obj
+         Release\SDPCommand.obj
+         Release\SDPUsbHidPacketizer.obj
+         Release\SearchPath.obj
+         Release\serial.obj
+         Release\SerialPacketizer.obj
+         Release\SourceFile.obj
+         Release\SRecordSourceFile.obj
+         Release\StELFFile.obj
+         Release\StExecutableImage.obj
+         Release\StIntelHexFile.obj
+         Release\StSRecordFile.obj
+         Release\UartPeripheral.obj
+         Release\Updater.obj
+         Release\UsbHidPacketizer.obj
+         Release\UsbHidPeripheral.obj
+         Release\utils.obj
+         Release\Value.obj
+         Release\CheckSum8.obj
+         Release\crc16.obj
+         Release\crc32.obj
+     1>LINK : warning LNK4068: 未指定 /MACHINE；默认设置为 X86
+         blfwk.vcxproj -> E:\work\VisualStudio\blhost\tools\common\blfwk\Release\blfwk.lib
+     1>已完成生成项目“E:\work\VisualStudio\blhost\tools\common\blfwk\blfwk.vcxproj”(Rebuild 个目标)的操作。
+
+已成功生成。
+
+已用时间 00:00:27.53

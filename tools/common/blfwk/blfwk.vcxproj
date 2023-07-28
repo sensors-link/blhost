@@ -68,8 +68,10 @@
     <ClInclude Include="..\..\..\src\blfwk\UsbHidPeripheral.h" />
     <ClInclude Include="..\..\..\src\blfwk\utils.h" />
     <ClInclude Include="..\..\..\src\blfwk\Value.h" />
+    <ClInclude Include="..\..\..\src\checksum\CheckSum8.h" />
     <ClInclude Include="..\..\..\src\crc\crc16.h" />
     <ClInclude Include="..\..\..\src\crc\crc32.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\blfwk\src\AESCounter.cpp" />
@@ -115,8 +117,12 @@
     <ClCompile Include="..\..\..\src\blfwk\src\UsbHidPeripheral.cpp" />
     <ClCompile Include="..\..\..\src\blfwk\src\utils.cpp" />
     <ClCompile Include="..\..\..\src\blfwk\src\Value.cpp" />
+    <ClCompile Include="..\..\..\src\checksum\src\CheckSum8.c" />
     <ClCompile Include="..\..\..\src\crc\src\crc16.c" />
     <ClCompile Include="..\..\..\src\crc\src\crc32.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="blfwk.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DE64A8C3-695A-491F-B3E3-24D6A3057A40}</ProjectGuid>

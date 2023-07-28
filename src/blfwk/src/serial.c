@@ -183,7 +183,7 @@ int serial_setup(int fd, speed_t speed)
     return 0;
 }
 
-int serial_set_read_timeout(int fd, uint32_t timeoutMs)
+int serial_set_read_timeout(int fd, uint32_t timeoutMs, bool bTimeOut)
 {
 #if defined(WIN32)
     COMMTIMEOUTS timeouts;
@@ -199,26 +199,37 @@ int serial_set_read_timeout(int fd, uint32_t timeoutMs)
     // only ReadTotalTimeoutConstant applies.
     // write: timeouts not used
     // reference: http://www.robbayer.com/files/serial-win.pdf
-    if (timeoutMs != 0)
-    {
-        timeouts.ReadIntervalTimeout = 1000;
-        timeouts.ReadTotalTimeoutMultiplier = 10;
-        timeouts.ReadTotalTimeoutConstant = timeoutMs;
-        timeouts.WriteTotalTimeoutMultiplier = 0;
-        timeouts.WriteTotalTimeoutConstant = 0;
-    }
-    else
-    {
-        // Need a seperate case for timeoutMs == 0
-        // setting all these values to 0 results in no timeout
-        // so set them to a minimum value, this will return immediately
-        // if there is no data available
-        timeouts.ReadIntervalTimeout = 1;
-        timeouts.ReadTotalTimeoutMultiplier = 1;
-        timeouts.ReadTotalTimeoutConstant = 1;
-        timeouts.WriteTotalTimeoutMultiplier = 0;
-        timeouts.WriteTotalTimeoutConstant = 0;
-    }
+	if (bTimeOut)
+	{
+		if (timeoutMs != 0)
+		{
+			timeouts.ReadIntervalTimeout = 1000;
+			timeouts.ReadTotalTimeoutMultiplier = 10;
+			timeouts.ReadTotalTimeoutConstant = timeoutMs;
+			timeouts.WriteTotalTimeoutMultiplier = 0;
+			timeouts.WriteTotalTimeoutConstant = 0;
+		}
+		else
+		{
+			// Need a seperate case for timeoutMs == 0
+			// setting all these values to 0 results in no timeout
+			// so set them to a minimum value, this will return immediately
+			// if there is no data available
+			timeouts.ReadIntervalTimeout = 1;
+			timeouts.ReadTotalTimeoutMultiplier = 1;
+			timeouts.ReadTotalTimeoutConstant = 1;
+			timeouts.WriteTotalTimeoutMultiplier = 0;
+			timeouts.WriteTotalTimeoutConstant = 0;
+		}
+	}
+	else
+	{
+		timeouts.ReadIntervalTimeout = MAXDWORD;
+		timeouts.ReadTotalTimeoutMultiplier = 0;
+		timeouts.ReadTotalTimeoutConstant = 0;
+		timeouts.WriteTotalTimeoutMultiplier = 0;
+		timeouts.WriteTotalTimeoutConstant = 0;
+	}
 
     if (!SetCommTimeouts(hCom, &timeouts))
     {

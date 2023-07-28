@@ -83,6 +83,7 @@ const cmd_t kCommand_EfuseReadOnce(0x00, 0x00000000, "efuse-read-once");
 // load-image doesn't sent any command, but data packet directly.
 const cmd_t kCommand_LoadImage(0x00, 0x00000000, "load-image");
 const cmd_t kCommand_ProgramAESKey(0x00, 0x00000000, "program-aeskey");
+const cmd_t kCommand_BootPing(0x00, 0x00000000, "boot-ping");
 
 const array<const cmd_t, 23> kCommands = { kCommand_FlashEraseAll,
                                            kCommand_FlashEraseRegion,
@@ -207,9 +208,11 @@ const property_t kProperty_FlashPageSize(kPropertyTag_FlashPageSize, "flash-page
 const property_t kProperty_IrqNotifierPin(kPropertyTag_IrqNotifierPin, "irq-notify-pin");
 const property_t kProperty_FfrKeystoreUpdateOpt(kPropertyTag_FfrKeystoreUpdateOpt, "ffr-keystore_update-opt");
 const property_t kProperty_ByteWriteTimeoutMs(kPropertyTag_ByteWriteTimeoutMs, "byte-write-timeout-ms");
+const property_t kProperty_MemoryCheckSum(kPropertyTag_MemoryCheckSum, "memory-checksum");
+const property_t kProperty_FlashEncrypt(kPropertyTag_FlashEncrypt, "flash-encrypt");
 const property_t kProperty_Invalid(kPropertyTag_InvalidProperty, "invalid-property");
 
-typedef array<const property_t, 31> PropertyArray;
+typedef array<const property_t, 33> PropertyArray;
 
 const PropertyArray kProperties = { kProperty_ListProperties,
                                     kProperty_CurrentVersion,
@@ -240,8 +243,10 @@ const PropertyArray kProperties = { kProperty_ListProperties,
                                     kProperty_ReliableUpdateStatus,
                                     kProperty_FlashPageSize,
                                     kProperty_IrqNotifierPin,
+									kProperty_FfrKeystoreUpdateOpt,
                                     kProperty_ByteWriteTimeoutMs,
-                                    kProperty_FfrKeystoreUpdateOpt };
+									kProperty_MemoryCheckSum,
+									kProperty_FlashEncrypt };
 //@}
 
 //! @name Memory IDs.
@@ -648,6 +653,8 @@ public:
         //! Before calling getData(), call hasMoreData() to determine if
         //! data is available.
         virtual uint32_t getData(uint8_t *data, uint32_t size) = 0;
+
+		virtual void rewindData() = 0;
     };
 
     /*!
@@ -691,6 +698,8 @@ public:
         //! data is available.
         virtual uint32_t getData(uint8_t *data, uint32_t size);
         //@}
+
+		virtual void rewindData() { rewind(m_filePointer); }
 
     protected:
         std::string m_filePath; //!< Data file path.
@@ -740,6 +749,8 @@ public:
         virtual uint32_t getData(uint8_t *data, uint32_t size);
         //@}
 
+		virtual void rewindData() { m_byteIndex = 0; }
+
     protected:
         uint32_t m_byteIndex;  //!< Current byte index.
         uchar_vector_t m_data; //!< Data byte vector.
@@ -775,6 +786,7 @@ public:
         //! data is available.
         virtual uint32_t getData(uint8_t *data, uint32_t size);
         //@}
+		virtual void rewindData() { m_byteIndex = 0; }
 
     protected:
         blfwk::DataSource::Segment *m_segment; //!< DataSource::Segment object.
@@ -2120,6 +2132,36 @@ public:
 protected:
     // No processResponse here.
     // Command sequence doesn't need to process response.
+};
+
+/*!
+* @brief Represents the BootPing command, used to establish a connection with boot
+*/
+class BootPing : public Command
+{
+public:
+	//! @brief Constructor that takes an argument vector.
+	BootPing(const string_vector_t *argv)
+		: Command(argv)
+	{
+	}
+
+	//! @brief Constructor that takes a SourceFile argument
+	BootPing(void)
+		: Command(kCommand_FlashImage.name)
+	{
+	}
+
+	//! @brief Initialize.
+	virtual bool init();
+
+	//! @brief Send command to packetizer.
+	virtual void sendTo(Packetizer &packetizer);
+
+protected:
+	uint32_t m_pingNum;				// Number of pings
+	uint32_t m_pingTimeOut;			// Ping timeout
+	// Command sequence doesn't need to process response.
 };
 
 //@}

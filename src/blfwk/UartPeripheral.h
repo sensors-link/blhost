@@ -50,7 +50,8 @@ public:
     //! @brief Flush.
     //!
     //! should be called on an open COM port in order to flush any remaining data in the UART RX buffer
-    void flushRX();
+	virtual void flushRX();
+	virtual void serial_set_timeout(bool bTimeOut);
 
     //! @brief Read bytes.
     //!

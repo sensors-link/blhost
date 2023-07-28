@@ -19,7 +19,7 @@ typedef enum
 
 enum
 {
-    MinEraseAlignment = 1024,
+    MinEraseAlignment = 512,
 };
 
 }; // namespace blfwk

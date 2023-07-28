@@ -31,7 +31,7 @@ using namespace std;
 const char k_toolName[] = "blhost";
 
 //! @brief Current version number for the tool.
-const char k_version[] = "2.6.7";
+const char k_version[] = "2.7.0";
 
 //! @brief Copyright string.
 const char k_copyright[] =
@@ -195,6 +195,8 @@ const char k_commandUsage[] =
     28                         Interrupt notifier pin\n\
     29                         FFR key store update option\n\
     30                         Byte write timeout in milliseconds\n\
+    224                        Checksum of written data\n\
+    225                        Encryption status of Flash\n\
   set-property <tag> <value>\n\
     10                         Verify Writes flag\n\
     22                         Read margin level of program flash\n\
@@ -208,6 +210,7 @@ const char k_commandUsage[] =
                                    0 for Keyprovisioning\n\
                                    1 for write-memory\n\
     30                         Byte write timeout in milliseconds\n\
+    225                        Encryption status of Flash\n\
   flash-erase-region <addr> <byte_count> [memory_id]\n\
                                Erase a region of flash according to [memory_id].\n\
   flash-erase-all [memory_id]  Erase all flash according to [memory_id],\n\
@@ -314,6 +317,10 @@ const char k_commandUsage[] =
   program-aeskey <file>\n\
                                Program AES key to OTP Field\n\
                                <file> is a raw binary contains an 128-bits key.\n\
+  boot-ping [count] [interval_time]\n\
+                               Perform [count] pings to boot with an interval of [interval_time].\n\
+                               [count] defaults to 10.\n\
+                               [interval time] defaults to 50, in ms.\n\
 \n\
 ** Note that not all commands/properties are supported on all platforms.\n";
 

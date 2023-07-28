@@ -1,4 +1,4 @@
-/*
+﻿/*
  * @brief LPC USB serial I/O interface definition
  *
  * @note
