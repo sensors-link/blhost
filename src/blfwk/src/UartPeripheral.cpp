@@ -25,7 +25,7 @@ UartPeripheral::UartPeripheral(const char *port, long speed)
     if (!init(port, speed))
     {
         throw std::runtime_error(
-            format_string("Error: UartPeripheral() cannot open PC UART port(%s), speed(%d Hz).", port, speed));
+            format_string("Error: UartPeripheral() cannot open PC UART port(%s), speed(%d Hz).\n", port, speed));
     }
 }
 

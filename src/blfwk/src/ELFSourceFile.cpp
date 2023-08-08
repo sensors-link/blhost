@@ -294,7 +294,7 @@ DataSource *ELFSourceFile::createDataSource(StringMatcher &matcher)
             std::string name = m_file->getSectionNameAtIndex(header.sh_name);
 
             // Ignore most section types
-            if (!(header.sh_type == SHT_PROGBITS || header.sh_type == SHT_NOBITS))
+            if (!(header.sh_type == SHT_PROGBITS))
             {
                 continue;
             }
@@ -603,8 +603,24 @@ unsigned ELFSourceFile::ELFDataSource::ProgBitsSegment::getLength()
 
 uint32_t ELFSourceFile::ELFDataSource::ProgBitsSegment::getBaseAddress()
 {
+	uint32_t addr;
     const Elf32_Shdr &section = m_elf->getSectionAtIndex(m_sectionIndex);
-    return section.sh_addr;
+
+	addr = section.sh_addr;
+
+	unsigned segmentIndex = 0;
+	Elf32_Phdr segment;
+	for (; segmentIndex < m_elf->getSegmentCount(); ++segmentIndex)
+	{
+		segment = m_elf->getSegmentAtIndex(segmentIndex);
+		if (section.sh_addr >= segment.p_vaddr && section.sh_addr < (segment.p_vaddr + segment.p_filesz))
+		{
+			addr = segment.p_paddr + section.sh_addr - segment.p_vaddr;
+			break;
+		}
+	}
+
+	return addr;
 }
 
 ELFSourceFile::ELFDataSource::NoBitsSegment::NoBitsSegment(ELFDataSource &source, StELFFile *elf, unsigned index)

@@ -260,6 +260,11 @@ status_t SerialPacketizer::ping(int retries, unsigned int delay, unsigned int ti
 {
 	status_t status = kStatus_NoPingResponse;
 	uint8_t startByte = 0;
+	uint8_t packetType = 0;
+	ping_response_t response;
+	uint8_t *pResponse;
+	uint8_t responseLen = 0;
+	uint8_t readStep = 0;
 	uint32_t bytesRead = 0;
 	const int initialRetries = retries;
 	static bool retryDoubledBaudrate = true;
@@ -290,16 +295,87 @@ status_t SerialPacketizer::ping(int retries, unsigned int delay, unsigned int ti
 			clock_gettime(CLOCK_REALTIME, &start);
 #endif
 
+			readStep = 0;
 			// Try for half a second to get a response from the ping.
 			while (duration < timeout)
 			{
-				if (m_peripheral->read(&startByte, sizeof(startByte), &bytesRead,
-					UartPeripheral::kUartPeripheral_UnusedTimeout) == kStatus_Success)
+				switch (readStep)
 				{
-					if (startByte == kFramingPacketStartByte)
+				case 0:
+				{
+					if (m_peripheral->read(&startByte, sizeof(startByte), &bytesRead,
+						UartPeripheral::kUartPeripheral_UnusedTimeout) == kStatus_Success)
 					{
-						break;
+						if (startByte == kFramingPacketStartByte)
+						{
+							readStep++;
+						}
 					}
+					break;
+				}
+				case 1:
+				{
+					if (m_peripheral->read(&packetType, sizeof(packetType), &bytesRead,
+						UartPeripheral::kUartPeripheral_UnusedTimeout) == kStatus_Success)
+					{
+						if (packetType == kFramingPacketType_PingResponse)
+						{
+							readStep++;
+							pResponse = (uint8_t *)&response;
+							responseLen = 0;
+						}
+						else
+						{
+							readStep = 0;
+						}
+					}
+					break;
+				}
+				case 2:
+				{
+					if (m_peripheral->read(pResponse, sizeof(*pResponse), &bytesRead,
+						UartPeripheral::kUartPeripheral_UnusedTimeout) == kStatus_Success)
+					{
+						pResponse++;
+						if (++responseLen >= sizeof(response))
+						{
+							// Initialize the CRC16 information.
+							uint16_t crc16;
+							crc16_data_t crcInfo;
+							crc16_init(&crcInfo);
+
+							// Include the start byte and packetType in the CRC.
+							crc16_update(&crcInfo, &startByte, sizeof(startByte));
+							crc16_update(&crcInfo, &packetType, sizeof(packetType));
+
+							// Run CRC on all other bytes except the CRC field.
+							crc16_update(&crcInfo, (uint8_t *)&response, sizeof(response) - sizeof(uint16_t));
+
+							// Finalize the CRC calculations
+							crc16_finalize(&crcInfo, &crc16);
+
+							if (response.crc16 == crc16)
+							{
+								Log::debug("Framing protocol version = 0x%x, options = 0x%x\n", response.version,
+									response.options);
+								m_version = response.version;
+								m_options = response.options;
+
+								status = kStatus_Success;
+								Log::info("Boot ping is success!\n");
+								return status;
+							}
+							else
+							{
+								Log::info("Error: ping crc16 failed, received 0x%x, expected 0x%x\n", response.crc16, crc16);
+								status = kStatus_InvalidCRC;
+							}
+						}
+					}
+					break;
+				}
+				default:
+					break;
 				}
 
 				host_delay(0);
@@ -314,78 +390,11 @@ status_t SerialPacketizer::ping(int retries, unsigned int delay, unsigned int ti
 					(double)(current.tv_sec - start.tv_sec) + (double)(current.tv_nsec - start.tv_nsec) / 1000000000;
 #endif
 			}
-
-			// If we got our start byte, move on to read the response packet
-			if (startByte == kFramingPacketStartByte)
-			{
-				break;
-			}
 		}
 
 		host_delay(delay);
 
 	} while (retries--);
-
-	m_peripheral->serial_set_timeout(true);
-
-	if (startByte == kFramingPacketStartByte)
-	{
-		Log::info("Ping responded in %d attempt(s)\n", (initialRetries - retries) + 1);
-
-		// Read response packet type.
-		uint8_t packetType;
-		status = m_peripheral->read(&packetType, sizeof(packetType), &bytesRead,
-			UartPeripheral::kUartPeripheral_UnusedTimeout);
-		if (status == kStatus_Success)
-		{
-			if (packetType == kFramingPacketType_PingResponse)
-			{
-				// Read response.
-				ping_response_t response;
-				status = m_peripheral->read((uint8_t *)&response, sizeof(response), &bytesRead,
-					UartPeripheral::kUartPeripheral_UnusedTimeout);
-				if (status == kStatus_Success)
-				{
-					// Validate reponse CRC.
-
-					// Initialize the CRC16 information.
-					uint16_t crc16;
-					crc16_data_t crcInfo;
-					crc16_init(&crcInfo);
-
-					// Include the start byte and packetType in the CRC.
-					crc16_update(&crcInfo, &startByte, sizeof(startByte));
-					crc16_update(&crcInfo, &packetType, sizeof(packetType));
-
-					// Run CRC on all other bytes except the CRC field.
-					crc16_update(&crcInfo, (uint8_t *)&response, sizeof(response) - sizeof(uint16_t));
-
-					// Finalize the CRC calculations
-					crc16_finalize(&crcInfo, &crc16);
-
-					if (response.crc16 == crc16)
-					{
-						Log::debug("Framing protocol version = 0x%x, options = 0x%x\n", response.version,
-							response.options);
-						m_version = response.version;
-						m_options = response.options;
-
-						status = kStatus_Success;
-						Log::info("Boot ping is success!\n");
-					}
-					else
-					{
-						Log::info("Error: ping crc16 failed, received 0x%x, expected 0x%x\n", response.crc16, crc16);
-						status = kStatus_InvalidCRC;
-					}
-				}
-			}
-			else
-			{
-				status = kStatus_InvalidPacketType;
-			}
-		}
-	}
 
 	return status;
 }

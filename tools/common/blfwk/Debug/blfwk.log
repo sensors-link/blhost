@@ -1,8 +1,9 @@
-﻿生成启动时间为 2023-7-24 10:58:36。
+﻿生成启动时间为 2023-8-3 16:03:54。
      1>项目“E:\work\VisualStudio\blhost\tools\common\blfwk\blfwk.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I../../../src /I../../../src/include /I../../../src/drivers/common /I../../../src/bm_usb /Zi /nologo /W3 /WX- /Od /Oy- /D BOOTLOADER_HOST /D LPCUSBSIO /D WIN32 /D MSWIN /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _LIB /D _USING_V110_SDK71_ /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\blfwk.pdb" /Gd /TP /wd4200 /analyze- /errorReport:prompt ..\..\..\src\blfwk\src\Command.cpp
-         Command.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I../../../src /I../../../src/include /I../../../src/drivers/common /I../../../src/bm_usb /Zi /nologo /W3 /WX- /Od /Oy- /D BOOTLOADER_HOST /D LPCUSBSIO /D WIN32 /D MSWIN /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _LIB /D _USING_V110_SDK71_ /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\blfwk.pdb" /Gd /TP /wd4200 /analyze- /errorReport:prompt ..\..\..\src\blfwk\src\SerialPacketizer.cpp
+         SerialPacketizer.cpp
+     1>e:\work\visualstudio\blhost\src\blfwk\src\serialpacketizer.cpp(337): warning C4700: 使用了未初始化的局部变量“pResponse”
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"E:\work\VisualStudio\blhost\tools\common\blfwk\Debug\blfwk.lib" setupapi.lib libusbsio.lib /LIBPATH:E:\work\VisualStudio\blhost\tools\common\blfwk\..\..\..\src\middleware\libusbsio\bin\Win32 /NOLOGO Debug\blfwk.res
          Debug\AESCounter.obj
@@ -59,4 +60,4 @@
 
 已成功生成。
 
-已用时间 00:00:24.78
+已用时间 00:00:01.97
