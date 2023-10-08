@@ -194,6 +194,7 @@ void Log::debug2(const char *fmt, ...)
 void StdoutLogger::_log(const char *msg)
 {
     printf("%s", msg);
+	fflush(stdout);
 }
 
 FileLogger::FileLogger(const char *file_path)

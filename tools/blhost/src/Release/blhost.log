@@ -1,4 +1,4 @@
-﻿生成启动时间为 2023-8-3 16:04:29。
+﻿生成启动时间为 2023-10-8 14:30:40。
      1>项目“E:\work\VisualStudio\blhost\tools\blhost\src\blhost.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IE:\work\VisualStudio\blhost\tools\blhost\src\..\.. /IE:\work\VisualStudio\blhost\tools\blhost\src\..\..\..\src /IE:\work\VisualStudio\blhost\tools\blhost\src\..\..\..\src\include /I. /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D BOOTLOADER_HOST /D LPCUSBSIO /D WIN32 /D _CRT_SECURE_NO_WARNINGS /D NDEBUG /D _CONSOLE /D _USING_V110_SDK71_ /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /wd4200 /analyze- /errorReport:prompt blhost.cpp
@@ -7,7 +7,6 @@
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\work\VisualStudio\blhost\tools\blhost\Release\blhost.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\..\common\blfwk\Release blfwk.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\work\VisualStudio\blhost\tools\blhost\Release\blhost.pdb" /SUBSYSTEM:CONSOLE,"5.01" /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\work\VisualStudio\blhost\tools\blhost\Release\blhost.lib" /MACHINE:X86 /SAFESEH Release\blhost.obj
            正在创建库 E:\work\VisualStudio\blhost\tools\blhost\Release\blhost.lib 和对象 E:\work\VisualStudio\blhost\tools\blhost\Release\blhost.exp
          正在生成代码
-     1>e:\work\visualstudio\blhost\src\blfwk\src\serialpacketizer.cpp(337): warning C4700: 使用了未初始化的局部变量“pResponse”
          All 3363 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
          已完成代码的生成
          blhost.vcxproj -> E:\work\VisualStudio\blhost\tools\blhost\Release\blhost.exe
@@ -15,4 +14,4 @@
 
 已成功生成。
 
-已用时间 00:00:04.83
+已用时间 00:00:05.09

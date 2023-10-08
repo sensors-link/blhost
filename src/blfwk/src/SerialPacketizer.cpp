@@ -262,7 +262,7 @@ status_t SerialPacketizer::ping(int retries, unsigned int delay, unsigned int ti
 	uint8_t startByte = 0;
 	uint8_t packetType = 0;
 	ping_response_t response;
-	uint8_t *pResponse;
+	uint8_t *pResponse = NULL;
 	uint8_t responseLen = 0;
 	uint8_t readStep = 0;
 	uint32_t bytesRead = 0;
