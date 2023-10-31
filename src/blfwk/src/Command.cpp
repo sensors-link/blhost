@@ -1746,6 +1746,7 @@ void WriteMemory::sendTo(Packetizer &device)
         // Argument string is file name, so use file data producer.
         if (!fileProducer.init(m_fileOrData, m_count))
         {
+			m_responseValues.push_back(kStatus_Fail);
             return;
         }
         dataProducer = &fileProducer;
@@ -1769,6 +1770,7 @@ void WriteMemory::sendTo(Packetizer &device)
         {
             Log::error("Error: Packet size(%d) is bigger than max supported size(%d).", packetSizeInBytes,
                        kMaxHostPacketSize);
+			m_responseValues.push_back(kStatus_Fail);
             return;
         }
     }
@@ -4095,11 +4097,15 @@ void FlashImage::sendTo(Packetizer &device)
     catch (exception &e)
     {
         Log::error("Error: %s", e.what());
+		m_responseValues.push_back(kStatus_Fail);
+		m_responseDetails.append(m_fileName + " " + getArg(0) + " is fail.");
         return;
     }
     if (m_sourceFile->getFileType() == SourceFile::source_file_t::kBinarySourceFile)
     {
         Log::error("Error: please use write-memory command for binary file downloading.\n");
+		m_responseValues.push_back(kStatus_Fail);
+		m_responseDetails.append(m_fileName + " " + getArg(0) + " is fail.");
         return;
     }
 

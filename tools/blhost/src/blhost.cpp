@@ -1061,9 +1061,9 @@ int BlHost::run()
                 }
 
                 // Only thing we consider an error is NoResponse
-                if (cmd->getResponseValues()->at(0) == kStatus_NoResponse)
+                //if (cmd->getResponseValues()->at(0) == kStatus_NoResponse)
                 {
-                    result = kStatus_NoResponse;
+                    result = cmd->getResponseValues()->at(0);
                 }
             }
         }
